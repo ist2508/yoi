@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import os
@@ -28,7 +27,12 @@ upload_tab, preprocess_tab, label_tab, balance_tab, model_tab, visual_tab = st.t
 with upload_tab:
     st.subheader("📂 Unggah File CSV")
     uploaded_file = st.file_uploader("Unggah file CSV Tweet", type="csv")
-    if uploaded_file is not None:
+if uploaded_file is not None:
+    df_check = pd.read_csv(uploaded_file)
+    if 'full_text' not in df_check.columns:
+        st.error("❌ File CSV harus memiliki kolom 'full_text'. Silakan unggah file yang sesuai.")
+    else:
+        uploaded_file.seek(0)  # reset pointer
         with open("dataMakanSiangGratis.csv", "wb") as f:
             f.write(uploaded_file.read())
         st.session_state['data_uploaded'] = True
